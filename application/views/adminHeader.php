@@ -48,7 +48,8 @@
 		          	<!--logo start-->
 		          	<a href="index.html" class="logo" >Flat<span>lab</span></a>
 		         	 <!--logo end-->
-		          	
+		          	<!--  base url for call all over the setup -->
+		          	<input type="hidden" name="base-url" id="base-url" value="<?php echo base_url();?>">
 		          	<div class="top-nav ">
 						<ul class="nav pull-right top-menu">
 							<!-- <li>

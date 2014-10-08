@@ -34,11 +34,11 @@
                   <div class="col-lg-12">
                       <section class="panel">
                           <header class="panel-heading">
-                              Dynamic Table
+                              Category List
                           </header>
                           <div class="panel-body">
                                 <div class="adv-table">
-                                    <table  class="display table table-bordered table-striped" id="category">
+                                    <table  class="display table table-bordered table-striped" id="dt-category">
                                       <thead>
                                       <tr>
                                           <th><input type="checkbox" name="checkAll" id="selectall"></th>

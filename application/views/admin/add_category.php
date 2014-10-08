@@ -24,19 +24,21 @@
                                         <div class="form-group ">
                                             <label for="cname" class="control-label col-lg-2">Category Name (required)</label>
                                             <div class="col-lg-10">
-                                                <input class=" form-control" id="cname" name="category" minlength="2" type="text" required />
+                                                <input id="cat_id" type="hidden" value="<?php if(isset($category) && (!empty($category))){ echo $category[0]->cat_id;}?>" />
+                                                <input class=" form-control" id="cname" name="category" minlength="2" type="text" value="<?php if(isset($category) && (!empty($category))){ echo $category[0]->category_name;}?>" />
+                                                <?php echo form_error('category');?>
                                             </div>
                                         </div>
                                         <div class="form-group ">
-                                            <label for="cdesc" class="control-label col-lg-2">categoru Description (optional)</label>
+                                            <label for="cdesc" class="control-label col-lg-2">category Description (optional)</label>
                                             <div class="col-lg-10">
-                                                <input class="form-control " id="cdesc" type="text" name="category_description" />
+                                                <input class="form-control " id="cdesc" type="text" name="category_description" value="<?php if(isset($category) && (!empty($category))){ echo $category[0]->category_description;}?>" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="col-lg-offset-2 col-lg-10">
                                                 <button class="btn btn-danger" type="submit" name="addCat">Save</button>
-                                                <button class="btn btn-default" type="button">Cancel</button>
+                                                <a href="<?php echo base_url('admin');?>" class="btn btn-default" >Cancel</a>
                                             </div>
                                         </div>
                                   </form>

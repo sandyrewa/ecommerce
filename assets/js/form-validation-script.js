@@ -1,5 +1,6 @@
 var Script = function () {
-
+    // base url
+    var baseUrl = $("#base-url").val();
     $.validator.setDefaults({
         submitHandler: function(form) {
             //alert("submitted!");
@@ -8,9 +9,62 @@ var Script = function () {
     });
 
     $().ready(function() {
-        // validate the comment form when it is submitted
-        $("#addCategory").validate();
-
+        // validate the add category form when it is submitted
+        $("#addCategory").validate({
+            rules: {
+                category: {
+                    required: true,
+                    minlength: 3,
+                    remote: {
+                        url: baseUrl+"admin/check_cat_name",
+                        type: "POST",
+                        data: {
+                            cat_id: function(){
+                                return $('#cat_id').val();
+                            }
+                        }
+                    }
+                }
+            },
+            messages:{
+                category: {
+                    required: "Please provide a category name",
+                    minlength: "Category name minimum 3 characters long",
+                    remote: "Category name already exists please enter another category"
+                }
+            }
+        });
+        // validate the add product form on keyup and submit
+        $("#addProduct").validate({
+            rules:{
+                category: "required",
+                product: {
+                    required: true,
+                    minlength:4,
+                    remote: {
+                        url: baseUrl+"admin/check_product_unique",
+                        type: "POST",
+                        data: {
+                            pname: function(){
+                                return $('#pname').val();
+                            }
+                        }
+                    }
+                },
+                product_price: "required",
+                product_stock: "required"
+            },
+            messages:{
+                category: "Please select a category for this product,",
+                product: {
+                    required: "Please provide a product name.",
+                    minlength: "Product name minimum 4 characters long.",
+                    remote: "Product already exists please enter another product detail."
+                },
+                product_price: "Please provide a product price.",
+                product_stock: "Please provide stock quantity."
+            }
+        });
         // validate signup form on keyup and submit
         $("#signupForm").validate({
             rules: {

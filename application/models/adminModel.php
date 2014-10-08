@@ -19,6 +19,39 @@ Class AdminModel extends CI_Model {
 		$this->db->insert($table, $data);
 		return $this->db->insert_id();
 	}
+	
+	// update database
+	public function update_data($table, $data, $where)
+	{
+		$this->db->where($where);
+		$this->db->update($table, $data);
+		return true;
+	}
+
+	// get all data from from table
+	public function get_all_data($table)
+	{
+		$this->db->select('*');
+		$this->db->from($table);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	// get data with where condition
+	public function get_all_where($table,$select=false, $where=false)
+	{
+		$this->db->select($select);
+		$this->db->from($table);
+		$this->db->where($where);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	// delete query
+	public function delete_query($table, $where)
+	{
+		$this->db->where($where);
+		$this->db->delete($table);
+		return true;
+	}
 	/*
 	* get category for data table
 	*/
@@ -27,7 +60,7 @@ Class AdminModel extends CI_Model {
 		$sTable = "categories as c";
 		$jTables = "";
 		$aSelectionColumns = array( 'c.cat_id', 'c.category_name','c.category_url', 'c.category_url', 'c.created_time', 'c.cat_status');
-		$aColumns = array( 'c.cat_id','c.category_name', 'c.created_time', 'c.cat_status');
+		$aColumns = array( 'c.cat_id','c.cat_id','c.category_name', 'c.created_time', 'c.cat_status');
 		
 		$sIndexColumn = "c.cat_id";
 		
@@ -100,16 +133,7 @@ Class AdminModel extends CI_Model {
 				$sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string($filters['sSearch_'.$i])."%' ";
 			}
 		}
-		/*if ( $sWhere == "" )
-		{
-			$sWhere = "WHERE u.status != 2 ";
-		}
-		else
-		{
-			$sWhere .= " AND u.status != 2";
-		}*/
 		
-
 		/*
 		 * SQL queries
 		 * Get data to display
@@ -126,6 +150,7 @@ Class AdminModel extends CI_Model {
 		/* Data set length after filtering */
 		$sQuery = "SELECT FOUND_ROWS()";
 		$query = $this->db->query($sQuery);
+		//echo $this->db->last_query();die;
 		$aResultFilterTotal = $query->result_array();
 		$iFilteredTotal = $aResultFilterTotal[0]['FOUND_ROWS()'];
 		
