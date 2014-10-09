@@ -2,9 +2,9 @@ var Script = function () {
     // base url
     var baseUrl = $("#base-url").val();
     $.validator.setDefaults({
-        submitHandler: function() {
+        submitHandler: function(form) {
             //alert("submitted!");
-            $("#addCategory").submit();
+            form.submit();
         }
     });
 
@@ -36,7 +36,6 @@ var Script = function () {
         });
         // validate the add product form on keyup and submit
         $("#addProduct").validate({
-            debug: false,
             rules:{
                 category: "required",
                 product: {
@@ -47,42 +46,23 @@ var Script = function () {
                         type: "POST",
                         data: {
                             pname: function(){
-                                    return $('#product').val();
-                            },
-                            product_id: function(){
-                                return $('#product_id').val();
+                                return $('#pname').val();
                             }
                         }
                     }
                 },
-                product_price: {
-                    required: true,
-                    number: true
-                },
-                product_stock: {
-                    required: true,
-                    number: true
-                }
+                product_price: "required",
+                product_stock: "required"
             },
             messages:{
-                category: "Please select a category for this product.",
+                category: "Please select a category for this product,",
                 product: {
                     required: "Please provide a product name.",
                     minlength: "Product name minimum 4 characters long.",
                     remote: "Product already exists please enter another product detail."
                 },
-                product_price: {
-                    required: "Please provide a product price.",
-                    number: "Product price contains only numeric value."
-                },
-                product_stock: {
-                    required: "Please provide stock quantity.",
-                    number: "Product stock contains only numeric value."
-                }
-            },
-            submitHandler: function(form) {
-                //alert("submitted!");
-                form.submit();
+                product_price: "Please provide a product price.",
+                product_stock: "Please provide stock quantity."
             }
         });
         // validate signup form on keyup and submit

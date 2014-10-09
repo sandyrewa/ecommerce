@@ -16,7 +16,7 @@
                   <div class="col-lg-12">
                       <section class="panel">
                           <header class="panel-heading">
-                            <?php if(isset($product)) echo "Update product"; else echo "Add new product"; ?>
+                              Add new product
                           </header>
                           <div class="panel-body">
                               <div class=" form">
@@ -26,46 +26,32 @@
                                             <div class="col-lg-10">
                                                 <select class="form-control" name="category">
                                                     <option value="">Select Category</option>
-                                                    <?php
-                                                    if(isset($categories) && (!empty($categories)))
-                                                    {
-                                                      foreach ($categories as $key => $category) {
-                                                        if($category->cat_id==$product[0]->product_id){
-                                                            $selected = 'selected="selected"';
-                                                        }else{
-                                                            $selected = "";
-                                                        }
-                                                        echo '<option value="'. $category->cat_id .'"  '. $selected .' >'. ucfirst($category->category_name).'</option>';
-                                                      }
-                                                    }
-                                                    ?>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group ">
-                                            <input class=" form-control" id="product_id" name="product_id" type="hidden" value="<?php if(isset($product)){ echo $product[0]->product_id;}?>" />
-                                            <label for="product" class="control-label col-lg-2">Product title <span class="text-danger">*</span></label>
+                                            <label for="pname" class="control-label col-lg-2">Product title <span class="text-danger">*</span></label>
                                             <div class="col-lg-10">
-                                                <input class=" form-control" id="product" name="product" minlength="2" type="text" placeholder="Enter product name" value="<?php if(isset($product)){ echo $product[0]->product_name;}?>" />
+                                                <input class=" form-control" id="pname" name="product" minlength="2" type="text" placeholder="Enter product name" value="" />
                                                 <?php echo form_error('product');?>
                                             </div>
                                         </div>
                                         <div class="form-group ">
                                             <label for="pdesc" class="control-label col-lg-2">Product description</label>
                                             <div class="col-lg-10">
-                                                <input class="form-control" id="pdesc" type="text" name="product_desc" placeholder="Enter product description" value="<?php if(isset($product)){ echo $product[0]->product_desc;}?>" />
+                                                <input class="form-control " id="pdesc" type="text" name="product_long_desc" placeholder="Enter product description" value="" />
                                             </div>
                                         </div>
                                         <div class="form-group ">
                                             <label for="pprice" class="control-label col-lg-2">Product price <span class="text-danger">*</span></label>
                                             <div class="col-lg-10">
-                                                <input class="form-control" id="pprice" type="text" name="product_price"  placeholder="Enter product price" value="<?php if(isset($product)){ echo $product[0]->product_price;}?>" />
+                                                <input class="form-control " id="pprice" type="text" name="product_price"  placeholder="Enter product price"value="" />
                                             </div>
                                         </div>
                                         <div class="form-group ">
                                             <label for="pstock" class="control-label col-lg-2">Product in stock <span class="text-danger">*</span></label>
                                             <div class="col-lg-10">
-                                                <input class="form-control" id="pstock" type="text" name="product_stock"  placeholder="Enter product quantity" value="<?php if(isset($product)){ echo $product[0]->product_stock;}?>" />
+                                                <input class="form-control " id="pstock" type="text" name="product_stock"  placeholder="Enter product quantity"value="" />
                                             </div>
                                         </div>
                                         <div class="form-group ">
@@ -76,9 +62,8 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-lg-offset-2 col-lg-10">
-                                                <!-- <button class="btn btn-danger" type="submit" name="addProduct">Save</button> -->
-                                                <input type="submit" name="addProduct" value="Save" class="btn btn-danger">
-                                                <a href="<?php echo base_url('admin/product');?>" class="btn btn-default" >Cancel</a>
+                                                <button class="btn btn-danger" type="submit" name="addCat">Save</button>
+                                                <a href="<?php echo base_url('admin');?>" class="btn btn-default" >Cancel</a>
                                             </div>
                                         </div>
                                   </form>

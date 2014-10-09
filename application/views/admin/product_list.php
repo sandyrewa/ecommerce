@@ -1,11 +1,11 @@
 <?php
 /*
-####################################################################
-### file location - application/views/admin/categories.php  ########
-### Developed by  - Sandeep singh                           ########
-###                                                         ########
-### Developer     - Sandeep Singh(sandy)                    ########
-####################################################################
+######################################################################
+### file location - application/views/admin/product_list.php  ########
+### Developed by  - Sandeep singh                             ########
+###                                                           ########
+### Developer     - Sandeep Singh(sandy)                      ########
+######################################################################
 */
 
 ?>
@@ -38,13 +38,16 @@
                           </header>
                           <div class="panel-body">
                                 <div class="adv-table">
-                                    <table  class="display table table-bordered table-striped" id="dt-category">
+                                    <table  class="display table table-bordered table-striped" id="dt-product-list">
                                       <thead>
                                       <tr>
                                           <!-- <th><input type="checkbox" name="checkAll" id="selectall"></th> -->
                                           <th>#</th>
-                                          <th>Categotry</th>
-                                          <th>Created Date</th>
+                                          <th>Product</th>
+                                          <th>Category</th>
+                                          <th>Price</th>
+                                          <th>Quantity</th>
+                                          <th>Create time</th>
                                           <th>Status</th>
                                           <th>Action</th>
                                       </tr>
