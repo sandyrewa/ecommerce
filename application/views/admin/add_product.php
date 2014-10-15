@@ -20,7 +20,7 @@
                           </header>
                           <div class="panel-body">
                               <div class=" form">
-                                  <form class="cmxform form-horizontal tasi-form" id="addProduct" method="post" action="">
+                                  <form class="cmxform form-horizontal tasi-form" id="addProduct" method="post" action="" enctype="multipart/form-data">
                                         <div class="form-group ">
                                             <label for="productcategory" class="control-label col-lg-2">Select category <span class="text-danger">*</span></label>
                                             <div class="col-lg-10">
@@ -30,12 +30,12 @@
                                                     if(isset($categories) && (!empty($categories)))
                                                     {
                                                       foreach ($categories as $key => $category) {
-                                                        if($category->cat_id==$product[0]->product_id){
+                                                        if(isset($product) && ($category->ebay_cat_id==$product[0]->ebay_product_id)){
                                                             $selected = 'selected="selected"';
                                                         }else{
                                                             $selected = "";
                                                         }
-                                                        echo '<option value="'. $category->cat_id .'"  '. $selected .' >'. ucfirst($category->category_name).'</option>';
+                                                        echo '<option value="'. $category->ebay_cat_id .'"  '. $selected .' >'. ucfirst($category->category_name).'</option>';
                                                       }
                                                     }
                                                     ?>
@@ -53,7 +53,7 @@
                                         <div class="form-group ">
                                             <label for="pdesc" class="control-label col-lg-2">Product description</label>
                                             <div class="col-lg-10">
-                                                <input class="form-control" id="pdesc" type="text" name="product_desc" placeholder="Enter product description" value="<?php if(isset($product)){ echo $product[0]->product_desc;}?>" />
+                                                <textarea class="form-control" id="pdesc" name="product_desc" ><?php if(isset($product)){ echo $product[0]->product_desc;}?></textarea> 
                                             </div>
                                         </div>
                                         <div class="form-group ">
@@ -62,12 +62,12 @@
                                                 <input class="form-control" id="pprice" type="text" name="product_price"  placeholder="Enter product price" value="<?php if(isset($product)){ echo $product[0]->product_price;}?>" />
                                             </div>
                                         </div>
-                                        <div class="form-group ">
+                                       <!--  <div class="form-group ">
                                             <label for="pstock" class="control-label col-lg-2">Product in stock <span class="text-danger">*</span></label>
                                             <div class="col-lg-10">
                                                 <input class="form-control" id="pstock" type="text" name="product_stock"  placeholder="Enter product quantity" value="<?php if(isset($product)){ echo $product[0]->product_stock;}?>" />
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="form-group ">
                                             <label for="pimage" class="control-label col-lg-2">Product image</label>
                                             <div class="col-lg-10">

@@ -178,7 +178,7 @@ Class AdminModel extends CI_Model {
 	
 	function get_product_for_datatable($filters){
 		$sTable = "products as p";
-		$jTables = " left join categories as c on (c.cat_id=p.product_cat_id) ";
+		$jTables = " left join categories as c on (c.ebay_cat_id=p.product_cat_id) ";
 		$aSelectionColumns = array( 'p.product_id', 'p.product_sku', 'p.product_barcode', 'p.product_name','p.product_price', 'p.product_stock','p.cretae_time','p.product_status', 'c.category_name');
 		$aColumns = array( 'p.product_id','p.product_name','c.category_name', 'p.product_price', 'p.product_stock', 'p.cretae_time', 'p.product_status');
 		

@@ -21,6 +21,46 @@ class Admin extends MY_Controller {
 		$this->adminInnerView('admin/categories_list', $this->data);
 	}
 	/*
+	*	Admin login
+	*/
+	public function login()
+	{
+		$this->data = array();
+		if($_POST)
+		{
+			$this->form_validation->set_rules('username', 'username', 'trim|required');
+			$this->form_validation->set_rules('password', 'password', 'trim|required');
+			if($this->form_validation->run() == FALSE)
+			{
+				$this->form_validation->set_error_delimiters('<label class="error">', '</label>');
+			}
+			else
+			{
+				$username = $_POST['username'];
+				$password = MD5($_POST['password']);
+				$where 	  = "(username = '$username' OR email = '$username') AND (password = '$password')";
+				$user_result = $this->AdminModel->get_all_where('users','*', $where);
+				if((count($user_result) > 0) && ($user_result[0]->user_role == 1))
+				{
+					// set session data
+					$sessionData = array(
+						'user_id'	=> $user_result[0]->user_id,
+						'username'  => $user_result[0]->username,
+						'email'     => $user_result[0]->email
+					);
+					$this->session->set_userdata($sessionData);
+					// after successfull login redirect to amdin panel
+					redirect(base_url('admin/product'));
+				}
+				else
+				{
+					$this->data['error'] = "username or password is incorrect.";
+				}
+			}
+		}
+		$this->load->view('admin/login', $this->data);
+	}
+	/*
 	* product category listing
 	*/
 	public function categories()
@@ -183,29 +223,110 @@ class Admin extends MY_Controller {
 			$this->form_validation->set_rules('product', 'product name', 'trim|required');
 			$this->form_validation->set_rules('product_price', 'product price', 'trim|required');
 			$this->form_validation->set_rules('product_price', 'product price', 'trim|required|numeric');
-			$this->form_validation->set_rules('product_stock', 'product quantity', 'trim|required|numeric');
+			//$this->form_validation->set_rules('product_stock', 'product quantity', 'trim|required|numeric');
 			if($this->form_validation->run() == FALSE)
 			{
 				$this->form_validation->set_error_delimiters('<label class="error">', '</label>');
 			}
 			else
 			{
-				$insertData = array(
-					'product_name'		=> $_POST['product'],
-					'product_url'		=> $this->_clean_string($_POST['product']),
-					'product_desc'		=> $_POST['product_desc'],
-					'product_cat_id'	=> $_POST['category'],
-					'product_price'		=> $_POST['product_price'],
-					'product_stock'		=> $_POST['product_stock']
-				);
-				$insertId = $this->AdminModel->insertData('products', $insertData);
-				if(!empty($insertId)){
-					redirect(base_url().'admin/product');
+				if(isset($_FILES['file']))
+				{
+					// if file is selected
+					// create image info array
+					$imgName = $_FILES['file']['name'];
+
+					$config['upload_path'] = './uploads/productImage/';
+					$config['allowed_types'] = 'gif|jpg|png|jpeg';
+					
+					//$config['max_size']	= '100';
+					//$config['max_width']  = '1024';
+					//$config['max_height']  = '768';
+					$imgName = time().$imgName;
+					$this->load->library('upload', $config);
+
+					if ( ! $this->upload->do_upload('file'))
+					{
+						echo $error = array('error' => $this->upload->display_errors());
+					}
+					else
+					{
+						$picturePath = base_url().'uploads/productImage/'.$imgName;
+						// image success fully uploaded then insert to ebay server
+						// grab our posted keywords and call helper function
+						// TODO: check if need urlencode
+						$title 			= $_POST['product'];
+						$categoryID 	= $_POST['category'];
+						$startPrice 	= $_POST['product_price'];
+						$pictureURL 	= $picturePath;
+						$description 	= $_POST['product_desc'];
+						
+						// call the getAddItem function to make AddItem call
+					  	$response = getAddItem($title, $categoryID, $startPrice, $pictureURL, $description);
+
+					  	// Display information to user based on AddItem response.
+		
+						// Convert the xml response string in an xml object
+						$xmlResponse = simplexml_load_string($response);
+						// Verify that the xml response object was created
+						if ($xmlResponse) {
+							
+							// Check for call success
+							if ($xmlResponse->Ack == "Success") {
+								
+								// aftre added to ebay add product to our server
+								$insertData = array(
+									'product_name'		=> $_POST['product'],
+									'product_url'		=> $this->_clean_string($_POST['product']),
+									'product_desc'		=> $_POST['product_desc'],
+									'ebay_product_id'	=> $xmlResponse->ItemID,
+									'product_cat_id'	=> $_POST['category'],
+									'product_image'		=> $picturePath,
+									'product_price'		=> $_POST['product_price']
+								);
+								$insertId = $this->AdminModel->insertData('products', $insertData);
+								if(!empty($insertId)){
+									redirect(base_url().'admin/product');
+								}
+
+								/*// Display the item id number added
+								echo "<p>Successfully added item as item #" . $xmlResponse->ItemID . "<br/>";
+								
+								// Calculate fees for listing
+								// loop through each Fee block in the Fees child node
+								$totalFees = 0;
+								$fees = $xmlResponse->Fees;
+								foreach ($fees->Fee as $fee) {
+									$totalFees += $fee->Fee;
+								}
+								echo "Total Fees for this listing: " . $totalFees . ".</p>";*/
+
+							} else {
+								
+								// Unsuccessful call, display error(s)
+								echo "<p>The AddItem called failed due to the following error(s):<br/>";
+								foreach ($xmlResponse->Errors as $error) {
+									$errCode = $error->ErrorCode;
+									$errLongMsg = htmlentities($error->LongMessage);
+									$errSeverity = $error->SeverityCode;
+									echo $errSeverity . ": [" . $errCode . "] " . $errLongMsg . "<br/>";
+								}
+								echo "</p>";
+							}
+							
+						}
+					}
 				}
+				else
+				{
+					$this->data['error'] = "Please select an image.";
+				}
+				
+			  	
 			}
 
 		}
-		$select = "cat_id, category_name, category_url";
+		$select = "cat_id, category_name, ebay_cat_id, category_url";
 		$table 	= "categories";
 		$where  = "";
 		$this->data['categories'] = $this->AdminModel->get_all_where($table, $select);

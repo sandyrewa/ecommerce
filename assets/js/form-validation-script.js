@@ -59,10 +59,11 @@ var Script = function () {
                     required: true,
                     number: true
                 },
-                product_stock: {
+               /* product_stock: {
                     required: true,
                     number: true
-                }
+                },*/
+                file: "required"
             },
             messages:{
                 category: "Please select a category for this product.",
@@ -75,10 +76,11 @@ var Script = function () {
                     required: "Please provide a product price.",
                     number: "Product price contains only numeric value."
                 },
-                product_stock: {
+               /* product_stock: {
                     required: "Please provide stock quantity.",
                     number: "Product stock contains only numeric value."
-                }
+                },*/
+                file: "Pleae select a product image."
             },
             submitHandler: function(form) {
                 //alert("submitted!");
